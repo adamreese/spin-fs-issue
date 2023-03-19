@@ -1,0 +1,26 @@
+spin_manifest_version = "1"
+authors = ["Adam Reese <adam@reese.io>"]
+description = ""
+name = "spin-fs"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "spin-fs"
+source = "main.wasm"
+allowed_http_hosts = []
+files = [{ source = "assets", destination = "/" }]
+[component.trigger]
+route = "/go/..."
+[component.build]
+command = "tinygo build -target=wasi -gc=leaking -o main.wasm main.go"
+
+[[component]]
+id = "rust"
+source = "target/wasm32-wasi/release/spin_fs.wasm"
+allowed_http_hosts = []
+files = [{ source = "assets", destination = "/" }]
+[component.trigger]
+route = "/rust/..."
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
